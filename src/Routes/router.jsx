@@ -4,6 +4,7 @@ import MainLayout from '../Layouts/MainLayout';
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Authentication/Login';
 import SignUp from '../Pages/Authentication/SignUp';
+import FindJobs from '../Pages/FindJobs/FindJobs';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
         {
             path: '/signup',
             Component: SignUp
+        },
+        {
+            path: '/find-jobs',
+            Component: FindJobs
         }
     ]
   },
