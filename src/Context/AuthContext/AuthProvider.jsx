@@ -23,19 +23,19 @@ const AuthProvider = ({ children }) => {
 
   const loginUser = (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth ,email, password);
+    return signInWithEmailAndPassword(auth, email, password);
   };
-//   const signWithGoogle = () => {
-//     setLoading(true);
-//     return signInWithPopup(auth, provider);
-//   };
+  //   const signWithGoogle = () => {
+  //     setLoading(true);
+  //     return signInWithPopup(auth, provider);
+  //   };
 
-//   const profileUpdate = (user) => {
-//     return updateProfile(auth.currentUser, {
-//       displayName: user.name,
-//       photoURL: user.photo,
-//     });
-//   };
+  //   const profileUpdate = (user) => {
+  //     return updateProfile(auth.currentUser, {
+  //       displayName: user.name,
+  //       photoURL: user.photo,
+  //     });
+  //   };
 
   const logOutUser = () => {
     setLoading(true);
@@ -45,12 +45,20 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setLoading(false);
-        setUser(currentUser);
+        try {
+          const res = await fetch(
+            `http://localhost:5000/api/users/${currentUser.email}`,
+          );
+          const dbUser = await res.json();
+
+          setUser({ ...currentUser, role: dbUser?.role || "user" });
+        } catch (err) {
+          setUser(currentUser);
+        }
       } else {
-        setLoading(false);
         setUser(null);
       }
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -64,12 +72,10 @@ const AuthProvider = ({ children }) => {
     // profileUpdate,
     // signWithGoogle,
     loading,
-    setLoading
+    setLoading,
   };
   // console.log(user);
-  return (
-    <AuthContex.Provider value={authData}>{children}</AuthContex.Provider>
-  );
+  return <AuthContex.Provider value={authData}>{children}</AuthContex.Provider>;
 };
 
 export default AuthProvider;

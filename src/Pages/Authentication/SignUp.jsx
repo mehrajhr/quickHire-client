@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from "react-icons/hi";
+import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
 import AuthContex from "../../Context/AuthContext/AuthContex";
+import axios from "axios";
 
 const SignUp = () => {
   const { createUser } = useContext(AuthContex);
@@ -21,7 +22,19 @@ const SignUp = () => {
 
     try {
       setError("");
-      await createUser(email, password);
+      const result = await createUser(email, password);
+      const user = result.user;
+
+      // 2. Prepare user data for MongoDB
+      const newUser = {
+        email: user.email,
+        role: "user",
+        createdAt: new Date(),
+      };
+
+      await axios.post("http://localhost:5000/api/users", newUser);
+
+      console.log("User registered and saved to DB");
       navigate("/");
     } catch (err) {
       setError(err.message || "Failed to create account.");
@@ -45,7 +58,9 @@ const SignUp = () => {
 
         <form onSubmit={handleSignup} className="space-y-5">
           <div className="form-control w-full">
-            <label className="label font-medium text-[#18191C]">Email Address</label>
+            <label className="label font-medium text-[#18191C]">
+              Email Address
+            </label>
             <div className="relative">
               <HiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               <input
@@ -73,7 +88,9 @@ const SignUp = () => {
           </div>
 
           <div className="form-control w-full">
-            <label className="label font-medium text-[#18191C]">Confirm Password</label>
+            <label className="label font-medium text-[#18191C]">
+              Confirm Password
+            </label>
             <div className="relative">
               <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               <input
@@ -93,7 +110,10 @@ const SignUp = () => {
 
         <p className="text-center mt-8 text-[#5E6670]">
           Already have an account?{" "}
-          <Link to="/login" className="text-[#4F46E5] font-bold hover:underline">
+          <Link
+            to="/login"
+            className="text-[#4F46E5] font-bold hover:underline"
+          >
             Login here
           </Link>
         </p>

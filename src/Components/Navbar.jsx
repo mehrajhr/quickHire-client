@@ -24,6 +24,13 @@ const Navbar = () => {
       <li className="mx-0 lg:mx-2 font-medium">
         <NavLink to='/find-jobs' className={({ isActive }) => isActive ? "text-[#4F46E5] font-bold" : ""}>Find Jobs</NavLink>
       </li>
+
+      {
+        user?.role === "admin" && (
+        <li>
+          <NavLink to='add-jobs'>Add Job</NavLink>
+        </li>)
+      }
       
     </>
   );
