@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { HiSearch, HiOutlineLocationMarker, HiFilter } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import ShowFindJobs from "./ShowFindJobs";
 
 const FindJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -9,8 +9,6 @@ const FindJobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
-
-  const navigate = useNavigate();
 
   // Categories based on your Figma design
   const categories = [
@@ -137,40 +135,7 @@ const FindJobs = () => {
             <div className="grid grid-cols-1 gap-4">
               {filteredJobs?.length > 0 ? (
                 filteredJobs?.map((job) => (
-                  // Inside your .map() function:
-                  <div
-                    key={job._id}
-                    className="bg-white p-6 rounded-xl border border-gray-100 hover:border-[#4F46E5] transition-all flex flex-col md:flex-row justify-between items-center gap-6 group shadow-sm"
-                  >
-                    <div
-                      className="flex gap-4 items-center w-full cursor-pointer"
-                      onClick={() => navigate(`/job/${job._id}`)} // Goes to Details
-                    >
-                      <div className="w-14 h-14 bg-[#F8F9FE] rounded-lg flex items-center justify-center text-2xl font-bold text-[#4F46E5] group-hover:bg-[#4F46E5] group-hover:text-white transition-all">
-                        {job.company.charAt(0)}
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-[#18191C] group-hover:text-[#4F46E5]">
-                          {job.title}
-                        </h3>
-                        <p className="text-sm text-gray-400">
-                          {job.company} • {job.location}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                      <span className="text-[#18191C] font-semibold text-lg">
-                        {job.salary}
-                      </span>
-                      <button
-                        onClick={() => navigate(`/job/${job._id}`)} // Goes to Apply Page
-                        className="btn bg-[#4F46E5] text-white hover:bg-[#3f37c9] border-none px-6"
-                      >
-                        Apply Now
-                      </button>
-                    </div>
-                  </div>
+                  <ShowFindJobs key={job._id} job={job} jobs={jobs} setJobs={setJobs}></ShowFindJobs>
                 ))
               ) : (
                 <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
