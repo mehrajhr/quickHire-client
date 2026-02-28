@@ -135,8 +135,8 @@ const FindJobs = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-4">
-              {filteredJobs.length > 0 ? (
-                filteredJobs.map((job) => (
+              {filteredJobs?.length > 0 ? (
+                filteredJobs?.map((job) => (
                   // Inside your .map() function:
                   <div
                     key={job._id}
@@ -164,7 +164,7 @@ const FindJobs = () => {
                         {job.salary}
                       </span>
                       <button
-                        onClick={() => navigate(`/apply/${job._id}`)} // Goes to Apply Page
+                        onClick={() => navigate(`/job/${job._id}`)} // Goes to Apply Page
                         className="btn bg-[#4F46E5] text-white hover:bg-[#3f37c9] border-none px-6"
                       >
                         Apply Now
